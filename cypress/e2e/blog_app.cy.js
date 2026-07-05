@@ -74,7 +74,7 @@ describe('Blog app', ()=>{
       cy.contains('First blog author created')
     })
 
-    it.only('a user can give a like on one blog', ()=>{
+    it('a user can give a like on one blog', ()=>{
 
       cy.createBlog({title: 'First blog title created', author: 'First blog author created', url:'First blog url created'})
 
@@ -87,7 +87,21 @@ describe('Blog app', ()=>{
 
       cy.get('.additional-info-blog')
           .contains('Likes 1')
+    })
 
+    it.only('blog user creator can deleted', ()=>{
+
+      cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'first blog url created'})
+
+      cy.get('button')
+          .contains('view')
+          .click()
+      cy.get('button')
+          .contains('Remove')
+          .click()
+
+      cy.get('First blog title created')
+          .should('be.not.exist')
     })
 
   })
