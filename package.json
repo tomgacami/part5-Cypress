@@ -1,0 +1,17 @@
+{
+  "name": "part5-cypress",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^15.18.0",
+    "eslint-plugin-cypress": "^6.4.2"
+  }
+}
