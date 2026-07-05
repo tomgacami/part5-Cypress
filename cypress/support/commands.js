@@ -33,6 +33,13 @@ Cypress.Commands.add('createBlog', ({title, author, url}) =>{
     cy.visit('http://localhost:5173')
 })
 
+Cypress.Commands.add('createUser', ({name, username, password})=>{
+    cy.request('POST','http://localhost:3003/api/users',
+        {name, username, password}
+    )
+    // cy.visit('http://localhost:5173')
+})
+
 
 //
 // -- This is a child command --

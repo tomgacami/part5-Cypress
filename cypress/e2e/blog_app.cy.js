@@ -89,7 +89,7 @@ describe('Blog app', ()=>{
           .contains('Likes 1')
     })
 
-    it.only('blog user creator can deleted', ()=>{
+    it('blog user creator can deleted', ()=>{
 
       cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'first blog url created'})
 
@@ -101,6 +101,25 @@ describe('Blog app', ()=>{
           .click()
 
       cy.get('First blog title created')
+          .should('be.not.exist')
+    })
+
+    it.only('only blog creator could delete his own blogs', ()=>{
+
+      cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'first blog url created'})
+
+      cy.get('button')
+          .contains('Logout')
+          .click()
+
+      cy.createUser({name: 'James', username: 'James_Jones', password: 'salainen'})
+      cy.login({username: 'James_Jones', password: 'salainen'})
+
+      cy.get('button')
+          .contains('view')
+          .click()
+      cy.get('button')
+          .contains('Remove')
           .should('be.not.exist')
     })
 
