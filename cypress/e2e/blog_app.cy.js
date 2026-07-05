@@ -52,4 +52,27 @@ describe('Blog app', ()=>{
 
   })
 
+  describe('When logged in', ()=>{
+    beforeEach(()=>{
+      cy.login({username: 'root', password: 'salainen'})
+    })
+
+    it.only('A blog can be created', ()=>{
+      cy.get('button')
+          .contains('Create new blog')
+          .click()
+      cy.get('#title-blog-input').type('First blog title created')
+      cy.get('#author-blog-input').type('First blog author created')
+      cy.get('#url-blog-input').type('First blog url created')
+
+      cy.get('form')
+          .contains('Create')
+          .click()
+
+      cy.wait(6000)
+      cy.contains('First blog title created')
+      cy.contains('First blog author created')
+    })
+  })
+
 })
