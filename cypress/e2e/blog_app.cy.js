@@ -57,7 +57,7 @@ describe('Blog app', ()=>{
       cy.login({username: 'root', password: 'salainen'})
     })
 
-    it.only('A blog can be created', ()=>{
+    it('A blog can be created', ()=>{
       cy.get('button')
           .contains('Create new blog')
           .click()
@@ -73,6 +73,23 @@ describe('Blog app', ()=>{
       cy.contains('First blog title created')
       cy.contains('First blog author created')
     })
+
+    it.only('a user can give a like on one blog', ()=>{
+
+      cy.createBlog({title: 'First blog title created', author: 'First blog author created', url:'First blog url created'})
+
+      cy.get('button')
+          .contains('view')
+          .click()
+      cy.get('button')
+          .contains('like')
+          .click()
+
+      cy.get('.additional-info-blog')
+          .contains('Likes 1')
+
+    })
+
   })
 
 })
