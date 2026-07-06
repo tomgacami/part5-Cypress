@@ -104,25 +104,83 @@ describe('Blog app', ()=>{
           .should('be.not.exist')
     })
 
-    it.only('only blog creator could delete his own blogs', ()=>{
+    describe('Blogs', ()=>{
 
-      cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'first blog url created'})
+      beforeEach(()=>{
+        cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'first blog url created'})
 
-      cy.get('button')
-          .contains('Logout')
-          .click()
+        cy.createUser({name: 'James', username: 'James_Jones', password: 'salainen'})
+      })
 
-      cy.createUser({name: 'James', username: 'James_Jones', password: 'salainen'})
-      cy.login({username: 'James_Jones', password: 'salainen'})
+      it('deletion only creator could do it', ()=>{
 
-      cy.get('button')
-          .contains('view')
-          .click()
-      cy.get('button')
-          .contains('Remove')
-          .should('be.not.exist')
+        cy.get('button')
+            .contains('Logout')
+            .click()
+
+        cy.login({username: 'James_Jones', password: 'salainen'})
+
+        cy.get('button')
+            .contains('view')
+            .click()
+
+        cy.get('button')
+            .contains('Remove')
+            .should('be.not.exist')
+      })
+    })
+  })
+
+  describe('Blogs order', ()=>{
+
+    beforeEach(() => {
+      cy.login({username: 'root', password: 'salainen'})
+
+      cy.createBlog({title: 'First blog title created', author: 'First blog author created', url: 'First blog url created'})
+      cy.createBlog({title: 'Second blog title created', author: 'Second blog author created', url: 'Second blog url created'})
+      cy.createBlog({title: 'Third blog title created', author: 'Third blog author created', url: 'Third blog url created'})
+
     })
 
+    it.only('by likes', ()=>{
+
+      //OPTION 1
+
+      // cy.contains('Third blog title created')
+      //     .parent()
+      //     .contains('view')
+      //     .click()
+      //
+      // cy.contains('[data-testid="blog"]', 'Third blog title created')
+      //     .find('button')
+      //     .contains('like')
+      //     .click()
+      //     .wait(2000)
+      //     .click()
+
+      //OPTION 2
+      cy.contains('[data-testid="blog"]', 'Third blog title created')
+          .within(()=>{
+            cy.contains('view').click()
+            cy.contains('like').click()
+                .wait(2000)
+                .click()
+          })
+
+      // cy.get('[data-testid="blog"]')
+      //     .invoke('text')
+      //     .then(blogs =>{
+      //       console.log(blogs)
+      //     })
+
+      cy.get('[data-testid="blog"]')
+          .eq(2)
+          .should('not.contain', 'Third blog title created')
+
+      cy.get('[data-testid="blog"]')
+          .eq(0)
+          .should('contain', 'Third blog title created')
+    })
   })
 
 })
